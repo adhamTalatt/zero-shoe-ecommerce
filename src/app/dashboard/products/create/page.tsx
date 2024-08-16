@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +23,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { ChevronLeft, XIcon } from "lucide-react";
 import Link from "next/link";
 
+import { UploadDropzone } from "@/utils/uploadthing";
+
+import { toast } from "react-toastify";
 const page = () => {
   return (
     <form>
@@ -78,6 +82,19 @@ const page = () => {
                   <SelectItem value="archived">Archived</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="flex flex-col gap-3">
+              <Label>Images</Label>
+              <UploadDropzone
+                endpoint="imageUploader"
+                onClientUploadComplete={() => {
+                  toast.success("Finished uploading");
+                }}
+                onUploadError={(error: Error) => {
+                  // Do something with the error.
+                  toast.success(error?.message);
+                }}
+              />
             </div>
           </div>
         </CardContent>
