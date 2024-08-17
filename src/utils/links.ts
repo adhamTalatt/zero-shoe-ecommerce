@@ -16,3 +16,5 @@ export const navlinks = [
     href: "/dashboard/banner",
   },
 ];
+
+export const DOMIAN = "http://localhost:3000";
