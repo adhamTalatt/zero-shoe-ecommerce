@@ -18,3 +18,5 @@ export const navlinks = [
 ];
 
 export const DOMIAN = "http://localhost:3000";
+
+export const ADMIN_EMAIL = "adhamtalattzakaria.one@gmail.com";

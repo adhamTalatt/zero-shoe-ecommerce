@@ -24,7 +24,18 @@ import {
 import { MoreHorizontal, PlusCircle, UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-const ProductsPage = () => {
+import prisma from "@/utils/db";
+import Image from "next/image";
+async function getData() {
+  const data = await prisma.product.findMany({
+    orderBy: {
+      cratedAt: "desc",
+    },
+  });
+  return data;
+}
+const ProductsPage = async () => {
+  const data = await getData();
   return (
     <>
       <div className="flex items-center justify-end">
@@ -55,34 +66,48 @@ const ProductsPage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell>
-                  <UserIcon className="rounded-md object-cover h-16 w-16" />
-                </TableCell>
-                <TableCell>Nike air</TableCell>
-                <TableCell>Active</TableCell>
-                <TableCell>$299.00</TableCell>
-                <TableCell>2024-06-10</TableCell>
-                <TableCell className="text-end">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button size="icon" variant="ghost">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Link href={`/dashboard/products/`}>Edit</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href={`/dashboard/products/`}>Delete</Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
+              {data.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <Image
+                      className="rounded-md object-cover h-16 w-16"
+                      src={item.images[0]}
+                      height={64}
+                      width={64}
+                      alt="Product Image"
+                    />
+                  </TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.status}</TableCell>
+                  <TableCell>{item.price}</TableCell>
+                  <TableCell>
+                    {new Date(item.cratedAt).toDateString()}
+                  </TableCell>
+                  <TableCell className="text-end">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button size="icon" variant="ghost">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link href={`/dashboard/products/${item.id}`}>
+                            Edit
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/dashboard/products/${item.id}/delete`}>
+                            Delete
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </CardContent>
