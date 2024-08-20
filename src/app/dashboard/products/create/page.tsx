@@ -31,7 +31,7 @@ import { createProduct } from "@/app/actions";
 
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
-import { productSchena } from "@/utils/zodValidtionShemas";
+import { productSchema } from "@/utils/zodValidtionShemas";
 import Image from "next/image";
 import SubmitBtn from "@/components/dashboard/SubmitBtn";
 const ProductCreateRoute = () => {
@@ -41,7 +41,7 @@ const ProductCreateRoute = () => {
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: productSchena });
+      return parseWithZod(formData, { schema: productSchema });
     },
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",

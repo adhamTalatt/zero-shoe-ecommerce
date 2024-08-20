@@ -28,7 +28,7 @@ import { ChevronLeft, XIcon } from "lucide-react";
 import { useFormState } from "react-dom";
 import { updateProduct } from "@/app/actions";
 import { useForm } from "@conform-to/react";
-import { productSchena } from "@/utils/zodValidtionShemas";
+import { productSchema } from "@/utils/zodValidtionShemas";
 import { parseWithZod } from "@conform-to/zod";
 import { toast } from "react-toastify";
 import Image from "next/image";
@@ -52,7 +52,7 @@ const EditForm = ({ data }: EditFormProps) => {
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: productSchena });
+      return parseWithZod(formData, { schema: productSchema });
     },
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",

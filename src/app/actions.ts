@@ -1,9 +1,9 @@
 "use server";
 import { ADMIN_EMAIL, DOMIAN } from "@/utils/links";
-import { productSchena } from "@/utils/zodValidtionShemas";
+import { bannerSchema, productSchema } from "@/utils/zodValidtionShemas";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
-import { toast } from "react-toastify";
+
 import { parseWithZod } from "@conform-to/zod";
 import prisma from "@/utils/db";
 
@@ -16,7 +16,7 @@ export async function createProduct(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: productSchena,
+    schema: productSchema,
   });
 
   if (submission.status !== "success") {
@@ -50,7 +50,7 @@ export async function updateProduct(prevState: unknown, formData: FormData) {
   }
 
   const submission = parseWithZod(formData, {
-    schema: productSchena,
+    schema: productSchema,
   });
 
   if (submission.status !== "success") {
@@ -92,4 +92,44 @@ export async function deleteProduct(formData: FormData) {
     where: { id: productId },
   });
   redirect(`${DOMIAN}/dashboard/products`);
+}
+
+export async function createBanner(prevState: unknown, formData: FormData) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user || user.email !== ADMIN_EMAIL) {
+    redirect("/");
+  }
+  const submissin = parseWithZod(formData, {
+    schema: bannerSchema,
+  });
+
+  if (submissin.status !== "success") {
+    return submissin.reply();
+  }
+
+  await prisma.banners.create({
+    data: {
+      title: submissin.value.title,
+      imageString: submissin.value.imageString,
+    },
+  });
+  redirect(`${DOMIAN}/dashboard/banner`);
+}
+
+export async function deleteBanner(formData: FormData) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user || user.email !== ADMIN_EMAIL) {
+    redirect(`${DOMIAN}/`);
+  }
+
+  const bannerId = formData.get("bannerId") as string;
+
+  await prisma.banners.delete({
+    where: { id: bannerId },
+  });
+  redirect(`${DOMIAN}/dashboard/banner`);
 }

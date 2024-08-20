@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -21,68 +22,59 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MoreHorizontal, PlusCircle, UserIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import prisma from "@/utils/db";
+import { MoreHorizontal, PlusCircle, User2 } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import React from "react";
 import Image from "next/image";
 async function getData() {
-  const data = await prisma.product.findMany({
-    orderBy: {
-      cratedAt: "desc",
-    },
-  });
+  const data = await prisma.banners.findMany();
+  if (!data) {
+    return notFound();
+  }
   return data;
 }
-const ProductsPage = async () => {
+
+const BannerRoute = async () => {
   const data = await getData();
   return (
     <>
-      <div className="flex items-center justify-end">
-        <Button asChild className="flex items-center gap-x-2">
-          <Link href="/dashboard/products/create">
-            <PlusCircle className="w-3.5 h-3.5" />
-            <span>Add Product</span>
+      <div className=" flex items-center justify-end mb-5">
+        <Button asChild className=" flex gap-x-2">
+          <Link href={"/dashboard/banner/create"}>
+            <PlusCircle className="h-3.5 w-3.5" />
+            <span>Add Banner</span>
           </Link>
         </Button>
       </div>
-      <Card className="mt-5">
+      <Card>
         <CardHeader>
-          <CardTitle>Products</CardTitle>
-          <CardDescription>
-            Manage your products and view their sales performance
-          </CardDescription>
+          <CardTitle>Banners</CardTitle>
+          <CardDescription>Manage your banners</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Image</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-end">Actions</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead className="text-end">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((item) => (
-                <TableRow key={item.id}>
+              {data.map((banner) => (
+                <TableRow key={banner.id}>
                   <TableCell>
                     <Image
-                      className="rounded-md object-cover h-16 w-16"
-                      src={item.images[0]}
-                      height={64}
-                      width={64}
-                      alt="Product Image"
+                      src={banner.imageString}
+                      alt="image Banner"
+                      width={100}
+                      height={100}
+                      priority={true}
                     />
                   </TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.status}</TableCell>
-                  <TableCell>${item.price}</TableCell>
-                  <TableCell>
-                    {new Date(item.cratedAt).toDateString()}
-                  </TableCell>
+                  <TableCell className=" font-medium">{banner.title}</TableCell>
                   <TableCell className="text-end">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -94,12 +86,7 @@ const ProductsPage = async () => {
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
-                          <Link href={`/dashboard/products/${item.id}`}>
-                            Edit
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link href={`/dashboard/products/${item.id}/delete`}>
+                          <Link href={`/dashboard/banner/${banner.id}/delete`}>
                             Delete
                           </Link>
                         </DropdownMenuItem>
@@ -116,4 +103,4 @@ const ProductsPage = async () => {
   );
 };
 
-export default ProductsPage;
+export default BannerRoute;
