@@ -3,11 +3,12 @@ import React from "react";
 import NavbarLinks from "./NavbarLinks";
 import {
   LoginLink,
-  LogoutLink,
   RegisterLink,
   getKindeServerSession,
 } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Button } from "../ui/button";
+import { ShoppingBagIcon } from "lucide-react";
+import UserDropdown from "./UserDropdown";
 
 const Navbar = async () => {
   const { getUser } = getKindeServerSession();
@@ -24,20 +25,30 @@ const Navbar = async () => {
       </div>
       <div className=" flex items-center">
         {!user ? (
-          <>
-            <Button>
+          <div className=" hidden md:flex md:flex-1 md:items-center md:justify-end md:space-x-2">
+            <Button asChild variant={"ghost"}>
               <LoginLink>Sign in</LoginLink>
             </Button>
-            <Button>
-              <RegisterLink>Sign up</RegisterLink>
+            <span className="h-6 w-px bg-gray-200"></span>
+            <Button asChild variant={"ghost"}>
+              <RegisterLink>Creat Acount</RegisterLink>
             </Button>
-          </>
+          </div>
         ) : (
           <>
-            <p>{user.email}</p>
-            <Button>
-              <LogoutLink>Log out</LogoutLink>
-            </Button>
+            <Link href={"/bag"} className=" group p-2 flex items-center mr-2">
+              <ShoppingBagIcon className="h-6 w-6 text-gray-400 group-hover:text-gray-500 transition duration-200" />
+              <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                5
+              </span>
+            </Link>
+            <UserDropdown
+              userImage={user.picture as string}
+              name={user.given_name as string}
+              email={
+                user.email ?? `https://avatar.vercel.sh/${user.given_name}`
+              }
+            />
           </>
         )}
       </div>

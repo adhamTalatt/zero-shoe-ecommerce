@@ -21,13 +21,13 @@ import Link from "next/link";
 import { useState } from "react";
 import { useFormState } from "react-dom";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 
 import "react-toastify/dist/ReactToastify.css";
 const CreateBannerRoute = () => {
   const [image, setImage] = useState<string | undefined>(undefined);
   const [lastResult, action] = useFormState(createBanner, undefined);
-  console.log(image);
 
   const [form, fields] = useForm({
     lastResult,
@@ -92,6 +92,7 @@ const CreateBannerRoute = () => {
                   height={200}
                   width={200}
                   className="w-[200px] h-[200px] object-cover border rounded-lg"
+                  priority={true}
                 />
               )}
               <p className="text-red-500">{fields.imageString.errors}</p>

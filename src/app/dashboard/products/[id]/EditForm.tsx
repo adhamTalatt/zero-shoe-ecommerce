@@ -31,6 +31,7 @@ import { useForm } from "@conform-to/react";
 import { productSchema } from "@/utils/zodValidtionShemas";
 import { parseWithZod } from "@conform-to/zod";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 
 interface EditFormProps {

@@ -34,6 +34,7 @@ import { parseWithZod } from "@conform-to/zod";
 import { productSchema } from "@/utils/zodValidtionShemas";
 import Image from "next/image";
 import SubmitBtn from "@/components/dashboard/SubmitBtn";
+import "react-toastify/dist/ReactToastify.css";
 const ProductCreateRoute = () => {
   const [images, setImages] = useState<string[]>([]);
   const [lastResult, action] = useFormState(createProduct, undefined);
