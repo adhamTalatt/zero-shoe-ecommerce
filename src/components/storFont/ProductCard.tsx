@@ -49,9 +49,9 @@ const ProductCard = ({
           ${price}
         </h3>
       </div>
-      <p className="text-gray-600 text-sm mt-2 line-clamp-2">{description}</p>
+      <p className="text-gray-600 text-sm mt-2 line-clamp-1">{description}</p>
       <Button className="w-full mt-5">
-        <Link href={`/products/${id}`}>Learn More!</Link>
+        <Link href={`/product/${id}`}>Learn More!</Link>
       </Button>
     </div>
   );
