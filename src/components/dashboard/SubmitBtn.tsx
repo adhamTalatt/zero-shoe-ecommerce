@@ -2,7 +2,7 @@
 
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, ShoppingBag } from "lucide-react";
 
 interface submitBtnProps {
   text: string;
@@ -16,7 +16,7 @@ interface submitBtnProps {
     | null
     | undefined;
 }
-const SubmitBtn = ({ text, variant }: submitBtnProps) => {
+export const SubmitBtn = ({ text, variant }: submitBtnProps) => {
   const { pending } = useFormStatus();
   return (
     <>
@@ -34,4 +34,19 @@ const SubmitBtn = ({ text, variant }: submitBtnProps) => {
   );
 };
 
-export default SubmitBtn;
+export const ShoppingBagButton = () => {
+  const { pending } = useFormStatus();
+  return (
+    <>
+      {pending ? (
+        <Button disabled size={"lg"} className="w-full mt-5">
+          <Loader2 className="mr-4 h-5 w-5 animate-spin" /> Please Wait
+        </Button>
+      ) : (
+        <Button size={"lg"} className="w-full mt-5">
+          <ShoppingBag className="mr-4 h-5 w-5" /> Add to Cart
+        </Button>
+      )}
+    </>
+  );
+};

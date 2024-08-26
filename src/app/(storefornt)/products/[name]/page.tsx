@@ -1,7 +1,8 @@
 import ProductCard from "@/components/storFont/ProductCard";
 import prisma from "@/utils/db";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import React from "react";
 interface CategoryPageProps {
@@ -105,6 +106,7 @@ const getData = async (Category: string) => {
 
 const CategoryPage = async ({ params: { name } }: CategoryPageProps) => {
   const { data, title } = await getData(name);
+  // await new Promise((resolve) => setTimeout(resolve, 5000));
   return (
     <section>
       <h1 className="font-semibold text-3xl my-5">{title}</h1>
@@ -119,14 +121,14 @@ const CategoryPage = async ({ params: { name } }: CategoryPageProps) => {
             images={item.images}
           />
         ))}
+        {data.length === 0 && (
+          <div className="flex  w-full items-center">
+            <h1 className="font-extrabold text-3xl t text-primary opacity-50">
+              Not found any Product ...
+            </h1>
+          </div>
+        )}
       </div>
-      {data.length === 0 && (
-        <div className="flex justify-center items-center w-full h-full">
-          <h1 className="font-extrabold text-3xl t text-primary opacity-50">
-            Not found any Product ...
-          </h1>
-        </div>
-      )}
     </section>
   );
 };

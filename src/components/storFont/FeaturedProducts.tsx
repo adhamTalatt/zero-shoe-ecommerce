@@ -1,7 +1,9 @@
 import prisma from "@/utils/db";
-import ProductCard from "./ProductCard";
+import ProductCard, { LoaddingProductCard } from "./ProductCard";
+import { Suspense } from "react";
 
 async function getData() {
+  // await new Promise((resolve) => setTimeout(resolve, 5000));
   const data = await prisma.product.findMany({
     where: {
       status: "published",
@@ -24,11 +26,23 @@ async function getData() {
   return data;
 }
 
-const FeaturedProducts = async () => {
-  const data = await getData();
+const FeaturedProducts = () => {
   return (
     <>
       <h2 className="text-2xl font-extrabold tracking-tight">Featured Items</h2>
+      <Suspense fallback={<LoadinnRows />}>
+        <LoadingFeaturedProducts />
+      </Suspense>
+    </>
+  );
+};
+
+export default FeaturedProducts;
+
+async function LoadingFeaturedProducts() {
+  const data = await getData();
+  return (
+    <>
       <div className=" mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 ">
         {data.map((item) => (
           <ProductCard
@@ -43,6 +57,14 @@ const FeaturedProducts = async () => {
       </div>
     </>
   );
-};
+}
 
-export default FeaturedProducts;
+function LoadinnRows() {
+  return (
+    <div className="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <LoaddingProductCard />
+      <LoaddingProductCard />
+      <LoaddingProductCard />
+    </div>
+  );
+}

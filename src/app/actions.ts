@@ -6,6 +6,10 @@ import { redirect } from "next/navigation";
 
 import { parseWithZod } from "@conform-to/zod";
 import prisma from "@/utils/db";
+import { redis } from "@/utils/redis";
+import { Cart } from "@/utils/interdaces";
+import { Item } from "@radix-ui/react-dropdown-menu";
+import { revalidatePath } from "next/cache";
 
 export async function createProduct(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession();
@@ -132,4 +136,91 @@ export async function deleteBanner(formData: FormData) {
     where: { id: bannerId },
   });
   redirect(`${DOMIAN}/dashboard/banner`);
+}
+
+export async function addItem(productId: string) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user || user.email !== ADMIN_EMAIL) {
+    redirect(`${DOMIAN}/`);
+  }
+
+  let cart: Cart | null = await redis.get(`cart-${user.id}`);
+
+  const selectedProduct = await prisma.product.findUnique({
+    where: { id: productId },
+    select: {
+      id: true,
+      name: true,
+      price: true,
+      images: true,
+    },
+  });
+  if (!selectedProduct) {
+    throw new Error("No product with this id");
+  }
+
+  let myCart = {} as Cart;
+
+  if (!cart || !cart.items) {
+    myCart = {
+      userId: user.id,
+      items: [
+        {
+          price: selectedProduct.price,
+          name: selectedProduct.name,
+          id: selectedProduct.id,
+          imageString: selectedProduct.images[0],
+          quantity: 1,
+        },
+      ],
+    };
+  } else {
+    let itemFound = false;
+
+    myCart.items = cart.items.map((item) => {
+      if (item.id === productId) {
+        itemFound = true;
+        item.quantity += 1;
+      }
+      return item;
+    });
+
+    if (!itemFound) {
+      myCart.items.push({
+        id: selectedProduct.id,
+        name: selectedProduct.name,
+        price: selectedProduct.price,
+        imageString: selectedProduct.images[0],
+        quantity: 1,
+      });
+    }
+  }
+
+  await redis.set(`cart-${user.id}`, myCart);
+  // for not save in cashe
+  revalidatePath("/", "layout");
+}
+
+export async function delItem(formData: FormData) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) {
+    redirect("/");
+  }
+  const productId = formData.get("productId");
+
+  let cart: Cart | null = await redis.get(`cart-${user.id}`);
+
+  if (cart && cart.items) {
+    const updateCart: Cart = {
+      userId: user.id,
+      items: cart.items.filter((item) => item.id !== productId),
+    };
+    await redis.set(`cart-${user.id}`, updateCart);
+  }
+  // for not save in cashe
+  revalidatePath("/bag", "page");
 }

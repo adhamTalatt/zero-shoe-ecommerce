@@ -15,3 +15,13 @@
     6- Uploadthing  => (for upload files)
     7- toastify     => (for add notifications)
     8- conform guide => (control over the form submission lifecycle)
+    9- Strip        => (Stripe powers online and in-person payment processing and financial solutions)
+    10-Redis            => (Redis is an in-memory database that persists on disk)
+
+### Was used inside next.js
+
+    - server actions
+    - server comoponet in 70% form project
+    - Routing (Dynamic Routes and Static Routing)
+    - middleware
+    - i18n
