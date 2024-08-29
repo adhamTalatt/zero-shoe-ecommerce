@@ -145,7 +145,7 @@ export async function addItem(productId: string) {
   const user = await getUser();
 
   if (!user || user.email !== ADMIN_EMAIL) {
-    redirect(`${DOMIAN}/`);
+    redirect(`${DOMIAN}/api/auth/login`);
   }
 
   let cart: Cart | null = await redis.get(`cart-${user.id}`);

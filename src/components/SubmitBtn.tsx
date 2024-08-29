@@ -35,9 +35,9 @@ export const SubmitBtn = ({ text, variant }: submitBtnProps) => {
   );
 };
 
-export const ShoppingBagButton = async () => {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+export const ShoppingBagButton = () => {
+  // const { getUser } = getKindeServerSession();
+  // const user = await getUser();
   const { pending } = useFormStatus();
   return (
     <>
@@ -46,7 +46,7 @@ export const ShoppingBagButton = async () => {
           <Loader2 className="mr-4 h-5 w-5 animate-spin" /> Please Wait
         </Button>
       ) : (
-        <Button disabled={!user} size={"lg"} className="w-full mt-5">
+        <Button size={"lg"} className="w-full mt-5">
           <ShoppingBag className="mr-4 h-5 w-5" /> Add to Cart
         </Button>
       )}

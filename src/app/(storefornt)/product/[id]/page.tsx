@@ -30,6 +30,7 @@ async function getData(ProductId: string) {
   return data;
 }
 const PrductIdRouter = async ({ params: { id } }: PrductIdRouterProps) => {
+  noStore();
   const data = await getData(id);
   const addProductShoppingCart = addItem.bind(null, data.id);
   return (

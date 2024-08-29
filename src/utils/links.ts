@@ -17,6 +17,9 @@ export const navlinks = [
   },
 ];
 
-export const DOMIAN = "https://zero-show.vercel.app/";
+export const DOMIAN =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "https://zero-show.vercel.app";
 
 export const ADMIN_EMAIL = "adhamtalattzakaria.one@gmail.com";
