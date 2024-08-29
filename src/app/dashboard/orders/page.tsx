@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import prisma from "@/utils/db";
-
+import { unstable_noStore as noStore } from "next/cache";
 async function getData() {
   const data = await prisma.order.findMany({
     orderBy: {
@@ -37,6 +37,7 @@ async function getData() {
   return data;
 }
 export default async function OrdersPage() {
+  noStore();
   const data = await getData();
   return (
     <Card>

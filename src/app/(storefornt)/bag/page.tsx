@@ -9,8 +9,10 @@ import { checkOut, delItem } from "@/app/actions";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { CheckOutButton } from "@/components/SubmitBtn";
+import { unstable_noStore as noStore } from "next/cache";
 
 const BagpRoute = async () => {
+  noStore();
   const { getUser } = getKindeServerSession();
   const user = await getUser();
   const cart: Cart | null = await redis.get(`cart-${user?.id}`);

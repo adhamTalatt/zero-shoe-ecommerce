@@ -12,7 +12,9 @@ import RecentSales from "@/components/dashboard/RecentSales";
 import Chart from "@/components/dashboard/Chart";
 import prisma from "@/utils/db";
 
+import { unstable_noStore as noStore } from "next/cache";
 async function getData() {
+  noStore();
   const now = new Date();
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(now.getDate() - 7);

@@ -28,6 +28,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
 import Image from "next/image";
+import { unstable_noStore as noStore } from "next/cache";
 async function getData() {
   const data = await prisma.banners.findMany();
   if (!data) {
@@ -37,6 +38,7 @@ async function getData() {
 }
 
 const BannerRoute = async () => {
+  noStore();
   const data = await getData();
   return (
     <>

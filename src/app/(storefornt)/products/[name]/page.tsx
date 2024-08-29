@@ -2,7 +2,8 @@ import ProductCard from "@/components/storFont/ProductCard";
 import prisma from "@/utils/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
+import { unstable_noStore as noStore } from "next/cache";
 
 import React from "react";
 interface CategoryPageProps {
@@ -105,6 +106,7 @@ const getData = async (Category: string) => {
 };
 
 const CategoryPage = async ({ params: { name } }: CategoryPageProps) => {
+  noStore();
   const { data, title } = await getData(name);
   // await new Promise((resolve) => setTimeout(resolve, 5000));
   return (

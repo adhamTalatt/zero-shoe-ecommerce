@@ -2,7 +2,7 @@ import prisma from "@/utils/db";
 import { DOMIAN } from "@/utils/links";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { NextResponse } from "next/server";
-
+import { unstable_noStore as noStore } from "next/cache";
 /**
  * @method GET
  * @route http://localhost:3000/api/creation
@@ -11,6 +11,7 @@ import { NextResponse } from "next/server";
  */
 
 export async function GET() {
+  noStore();
   const { getUser } = getKindeServerSession();
   const user = await getUser();
   if (!user) {

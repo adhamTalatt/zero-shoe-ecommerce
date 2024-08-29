@@ -7,7 +7,7 @@ import prisma from "@/utils/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { ShoppingBag, StarIcon } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
-
+import { unstable_noStore as noStore } from "next/cache";
 interface PrductIdRouterProps {
   params: { id: string };
 }
@@ -30,6 +30,7 @@ async function getData(ProductId: string) {
   return data;
 }
 const PrductIdRouter = async ({ params: { id } }: PrductIdRouterProps) => {
+  noStore();
   const data = await getData(id);
   const addProductShoppingCart = addItem.bind(null, data.id);
   return (

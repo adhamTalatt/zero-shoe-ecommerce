@@ -36,6 +36,7 @@ export default async function DashboardLayout({
 }: {
   children: ReactNode;
 }) {
+  noStore();
   const data = await getData();
   return (
     <div className="flex w-full flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
