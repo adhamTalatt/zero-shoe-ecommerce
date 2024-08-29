@@ -3,6 +3,7 @@
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Loader2, ShoppingBag } from "lucide-react";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 interface submitBtnProps {
   text: string;
@@ -34,7 +35,9 @@ export const SubmitBtn = ({ text, variant }: submitBtnProps) => {
   );
 };
 
-export const ShoppingBagButton = () => {
+export const ShoppingBagButton = async () => {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
   const { pending } = useFormStatus();
   return (
     <>
@@ -43,7 +46,7 @@ export const ShoppingBagButton = () => {
           <Loader2 className="mr-4 h-5 w-5 animate-spin" /> Please Wait
         </Button>
       ) : (
-        <Button size={"lg"} className="w-full mt-5">
+        <Button disabled={!user} size={"lg"} className="w-full mt-5">
           <ShoppingBag className="mr-4 h-5 w-5" /> Add to Cart
         </Button>
       )}
