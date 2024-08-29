@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import { unstable_noStore as noStore } from "next/cache";
 /**
  * @method GET
- * @route http://localhost:3000/api/creation
+ * @route http://`localhost:3000`/api/creation
  * @desc auth for user
  * @access public
  */
