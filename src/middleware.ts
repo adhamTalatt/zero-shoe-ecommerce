@@ -2,6 +2,7 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { DOMIAN } from "./utils/links";
 
 async function userCheck() {
   const { getUser } = getKindeServerSession();
@@ -14,7 +15,9 @@ async function userCheck() {
 export async function middleware(request: NextRequest) {
   const user = await userCheck();
   if (!user) {
-    return NextResponse.redirect(new URL("/api/auth/login", request.url));
+    return NextResponse.redirect(
+      new URL(`${DOMIAN}/api/auth/login`, request.url)
+    );
   }
 }
 
