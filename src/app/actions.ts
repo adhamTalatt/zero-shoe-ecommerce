@@ -143,12 +143,10 @@ export async function deleteBanner(formData: FormData) {
 export async function addItem(productId: string) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
-
-  if (!user || user.email !== ADMIN_EMAIL) {
+  if (!user) {
     redirect(`${DOMIAN}/api/auth/login`);
   }
-
-  let cart: Cart | null = await redis.get(`cart-${user.id}`);
+  let cart: Cart | null = await redis.get(`cart-${user?.id}`);
 
   const selectedProduct = await prisma.product.findUnique({
     where: { id: productId },
@@ -167,7 +165,7 @@ export async function addItem(productId: string) {
 
   if (!cart || !cart.items) {
     myCart = {
-      userId: user.id,
+      userId: user?.id as string,
       items: [
         {
           price: selectedProduct.price,
@@ -200,7 +198,7 @@ export async function addItem(productId: string) {
     }
   }
 
-  await redis.set(`cart-${user.id}`, myCart);
+  await redis.set(`cart-${user?.id}`, myCart);
   // for not save in cashe
   revalidatePath("/", "layout");
 }

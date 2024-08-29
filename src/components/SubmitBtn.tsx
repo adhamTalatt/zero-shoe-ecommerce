@@ -36,8 +36,6 @@ export const SubmitBtn = ({ text, variant }: submitBtnProps) => {
 };
 
 export const ShoppingBagButton = () => {
-  // const { getUser } = getKindeServerSession();
-  // const user = await getUser();
   const { pending } = useFormStatus();
   return (
     <>
