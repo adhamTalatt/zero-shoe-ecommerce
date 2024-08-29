@@ -23,11 +23,5 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: [
-    "/bag",
-    "/products/:path*",
-    "/product/:path*",
-    "/payment/:path*",
-    "/dasboard/:path*",
-  ],
+  matcher: ["/bag", "/payment/:path*", "/dasboard/:path*"],
 };

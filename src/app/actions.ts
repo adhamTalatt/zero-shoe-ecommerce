@@ -232,7 +232,7 @@ export async function checkOut() {
   const user = await getUser();
 
   if (!user) {
-    return redirect("/");
+    return redirect(`${DOMIAN}/api/auth/login`);
   }
 
   let cart: Cart | null = await redis.get(`cart-${user.id}`);
