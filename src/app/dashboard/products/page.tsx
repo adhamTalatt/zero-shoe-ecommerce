@@ -79,7 +79,7 @@ const ProductsPage = async () => {
                   </TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.status}</TableCell>
-                  <TableCell>${item.price}</TableCell>
+                  <TableCell>EGP {item.price}</TableCell>
                   <TableCell>
                     {new Date(item.cratedAt).toDateString()}
                   </TableCell>

@@ -1,5 +1,5 @@
 import { deleteProduct } from "@/app/actions";
-import SubmitBtn from "@/components/dashboard/SubmitBtn";
+import { SubmitBtn } from "@/components/SubmitBtn";
 import { Button } from "@/components/ui/button";
 import {
   Card,

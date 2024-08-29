@@ -13,8 +13,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import prisma from "@/utils/db";
 
+async function getData() {
+  const data = await prisma.order.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      amount: true,
+      createdAt: true,
+      status: true,
+      id: true,
+      User: {
+        select: {
+          firstName: true,
+          email: true,
+          porfileImage: true,
+        },
+      },
+    },
+  });
+  return data;
+}
 export default async function OrdersPage() {
+  const data = await getData();
   return (
     <Card>
       <CardHeader className="px-7">
@@ -33,18 +56,25 @@ export default async function OrdersPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <p className="font-medium">adham talatt</p>
-                <p className="hidden md:flex text-sm text-muted-foreground">
-                  adhamtalatt@yahoo.com
-                </p>
-              </TableCell>
-              <TableCell>Sale</TableCell>
-              <TableCell>Succesfull</TableCell>
-              <TableCell>2024-06-15</TableCell>
-              <TableCell className="text-right">$250</TableCell>
-            </TableRow>
+            {data.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>
+                  <p className="font-medium">{item.User?.firstName}</p>
+                  <p className="hidden md:flex text-sm text-muted-foreground">
+                    {item.User?.email}
+                  </p>
+                </TableCell>
+                <TableCell>order</TableCell>
+                <TableCell>{item.status}</TableCell>
+                <TableCell>
+                  {new Intl.DateTimeFormat("en-US").format(item.createdAt)}
+                </TableCell>
+                <TableCell className="text-right">
+                  {/* EGP {new Intl.NumberFormat("ar-EG").format(item.amount / 100)} */}
+                  EGP {new Intl.NumberFormat("en-US").format(item.amount / 100)}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </CardContent>

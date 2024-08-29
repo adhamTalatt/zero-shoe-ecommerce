@@ -47,7 +47,7 @@ const ProductCard = ({
       <div className="flex justify-between items-center mt-2">
         <h1 className="font-semibold text-xl">{name}</h1>
         <h3 className=" inline-flex items-center rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary ring-1 ring-inset ring-primary/10">
-          ${price}
+          EGP {price}
         </h3>
       </div>
       <p className="text-gray-600 text-sm mt-2 line-clamp-1">{description}</p>

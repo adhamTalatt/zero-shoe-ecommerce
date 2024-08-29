@@ -5,9 +5,10 @@ import { redirect } from "next/navigation";
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { delItem } from "@/app/actions";
+import { checkOut, delItem } from "@/app/actions";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import { CheckOutButton } from "@/components/SubmitBtn";
 
 const BagpRoute = async () => {
   const { getUser } = getKindeServerSession();
@@ -20,7 +21,7 @@ const BagpRoute = async () => {
   });
   return (
     <div className="max-w-2xl mx-auto mt-10 min-h-[55vh]  ">
-      {cart?.items.length === 0 ? (
+      {!cart || !cart.items || cart.items.length === 0 ? (
         <div className="flex min-h-[400px] flex-col items-center justify-center rounded-lg border-dashed p-8 text-center mt-20">
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
             <ShoppingBag className="w-10 h-10 text-primary" />
@@ -53,7 +54,7 @@ const BagpRoute = async () => {
                 <div className=" flex flex-col h-full justify-between">
                   <div className=" flex items-center gap-x-2">
                     <p>{item.quantity}x</p>
-                    <p>${item.price}</p>
+                    <p>EGP {item.price}</p>
                   </div>
                   <form action={delItem} className="text-end">
                     <input type="hidden" name="productId" value={item.id} />
@@ -69,13 +70,13 @@ const BagpRoute = async () => {
             <div className=" flex items-center justify-between font-medium   rounded-md">
               <p className=" p-2">Subtotal:</p>
               <p className=" bg-blue-300 rounded-md p-2">
-                ${new Intl.NumberFormat("en-US").format(totalPrice)}
+                EGP {new Intl.NumberFormat("EGP").format(totalPrice)}
               </p>
             </div>
 
-            <Button size={"lg"} className={"w-full mt-5"}>
-              Checkout
-            </Button>
+            <form action={checkOut}>
+              <CheckOutButton />
+            </form>
           </div>
         </div>
       )}

@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UploadDropzone } from "@/utils/uploadthing";
-import SubmitBtn from "@/components/dashboard/SubmitBtn";
+import { SubmitBtn } from "@/components/SubmitBtn";
 import { ChevronLeft, XIcon } from "lucide-react";
 import { useFormState } from "react-dom";
 import { updateProduct } from "@/app/actions";

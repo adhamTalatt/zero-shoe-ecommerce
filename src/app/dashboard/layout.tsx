@@ -16,19 +16,27 @@ import { redirect } from "next/navigation";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { unstable_noStore as noStore } from "next/cache";
 import { ADMIN_EMAIL } from "@/utils/links";
+import Link from "next/link";
+import { date } from "zod";
+import prisma from "@/utils/db";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+async function getData() {
+  const data = await prisma.user.findUnique({
+    where: { id: "kp_5fa38088ac1c4197880b94511836069b" },
+    select: {
+      firstName: true,
+      porfileImage: true,
+    },
+  });
+  return data;
+}
 export default async function DashboardLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  noStore();
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-
-  if (!user || user.email !== ADMIN_EMAIL) {
-    return redirect("/");
-  }
+  const data = await getData();
   return (
     <div className="flex w-full flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-white">
@@ -55,13 +63,19 @@ export default async function DashboardLayout({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full">
-              <CircleUser className="w-5 h-5" />
-            </Button>
+            <Avatar className="h-10 w-10">
+              <AvatarImage src={data?.porfileImage} alt="User Image" />
+              <AvatarFallback>
+                {data?.firstName.slice(0, 3).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>Hi {data?.firstName}</DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href={"/"}>Go To Store</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <LogoutLink>Logout</LogoutLink>
             </DropdownMenuItem>
