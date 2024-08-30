@@ -22,4 +22,4 @@ export const DOMIAN =
     ? "http://localhost:3000"
     : "https://zero-show.vercel.app";
 
-export const ADMIN_EMAIL = "abdotlos60@gmail.com";
+export const ADMIN_EMAIL = "adhamtalattzakaria.one@gmail.com";

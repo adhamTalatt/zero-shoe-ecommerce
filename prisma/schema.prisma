@@ -20,6 +20,7 @@ model User {
   lastName     String
   porfileImage String
   orders       Order[]
+  isAdmin      Boolean @default(false)
 
   createdAt DateTime @default(now())
 }
