@@ -14,7 +14,7 @@ export const NavLinks = [
 const NavbarLinks = () => {
   const location = usePathname();
   return (
-    <div className="hidden md:flex justify-center items-center gap-x-2 ml-8">
+    <>
       {NavLinks.map((item) => (
         <Link
           key={item.id}
@@ -29,7 +29,7 @@ const NavbarLinks = () => {
           {item.name}
         </Link>
       ))}
-    </div>
+    </>
   );
 };
 
